@@ -1,0 +1,21 @@
+{
+  "name": "gcadr-editorial-api",
+  "version": "1.0.0",
+  "description": "GCADR Editorial Workflow API - Backend for blog editorial system",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "vercel build",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "@octokit/rest": "^20.0.2",
+    "resend": "^2.1.0"
+  },
+  "devDependencies": {
+    "vercel": "^33.0.0"
+  },
+  "keywords": ["gcadr", "editorial", "workflow", "api"],
+  "author": "GCADR",
+  "license": "MIT"
+}
