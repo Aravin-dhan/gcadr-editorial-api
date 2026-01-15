@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>GCADR Editorial API</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            background: #0e2a47;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 500px;
+            padding: 40px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        p {
+            opacity: 0.7;
+            margin-bottom: 30px;
+        }
+
+        .endpoints {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: left;
+        }
+
+        .endpoint {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .endpoint:last-child {
+            border: none;
+        }
+
+        code {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        a {
+            color: #b4975a;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🏛️ GCADR Editorial API</h1>
+        <p>Serverless backend for GCADR Blog Editorial Workflow</p>
+        <div class="endpoints">
+            <div class="endpoint"><code>GET</code> <a href="/api/submissions">/api/submissions</a></div>
+            <div class="endpoint"><code>POST</code> /api/submissions/create</div>
+            <div class="endpoint"><code>POST</code> /api/submissions/update-status</div>
+            <div class="endpoint"><code>GET</code> <a href="/api/editors">/api/editors</a></div>
+            <div class="endpoint"><code>GET</code> <a href="/api/teams">/api/teams</a></div>
+            <div class="endpoint"><code>GET</code> <a href="/api/audit-log">/api/audit-log</a></div>
+            <div class="endpoint"><code>POST</code> /api/webhooks/google-form</div>
+        </div>
+    </div>
+</body>
+
+</html>
