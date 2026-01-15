@@ -4,9 +4,7 @@
   "description": "GCADR Editorial Workflow API - Backend for blog editorial system",
   "main": "index.js",
   "scripts": {
-    "dev": "vercel dev",
-    "build": "vercel build",
-    "deploy": "vercel --prod"
+    "dev": "vercel dev"
   },
   "dependencies": {
     "@octokit/rest": "^20.0.2",
@@ -15,7 +13,12 @@
   "devDependencies": {
     "vercel": "^33.0.0"
   },
-  "keywords": ["gcadr", "editorial", "workflow", "api"],
+  "keywords": [
+    "gcadr",
+    "editorial",
+    "workflow",
+    "api"
+  ],
   "author": "GCADR",
   "license": "MIT"
 }
