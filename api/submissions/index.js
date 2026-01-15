@@ -1,12 +1,8 @@
 // API: Get all submissions
-const GitHubStorage = require('../lib/github-storage');
+const allowCors = require('../../lib/cors');
+const GitHubStorage = require('../../lib/github-storage');
 
-module.exports = async (req, res) => {
-    // CORS
-    if (req.method === 'OPTIONS') {
-        return res.status(200).end();
-    }
-
+const handler = async (req, res) => {
     try {
         const storage = new GitHubStorage();
 
@@ -44,3 +40,5 @@ module.exports = async (req, res) => {
         return res.status(500).json({ error: error.message });
     }
 };
+
+module.exports = allowCors(handler);
