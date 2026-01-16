@@ -68,6 +68,51 @@ const handler = async (req, res) => {
             return res.status(200).json({ success: true });
         }
 
+        if (req.method === 'PUT') {
+            const { editorId, name, email, role, teamId, regenerateCode } = req.body;
+            if (!editorId) return res.status(400).json({ error: 'Missing editorId' });
+
+            const editors = await storage.getEditors();
+            const index = editors.findIndex(e => e.id === editorId);
+            if (index === -1) return res.status(404).json({ error: 'Editor not found' });
+
+            const oldName = editors[index].name;
+            let newAccessCode = null;
+
+            // Update fields if provided
+            if (name !== undefined) editors[index].name = name;
+            if (email !== undefined) editors[index].email = email;
+            if (role !== undefined) editors[index].role = role;
+            if (teamId !== undefined) editors[index].teamId = teamId;
+            editors[index].updatedAt = new Date().toISOString();
+
+            // Regenerate access code if requested - old code becomes invalid
+            if (regenerateCode) {
+                const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+                newAccessCode = 'gcadr-';
+                for (let i = 0; i < 8; i++) newAccessCode += chars.charAt(Math.floor(Math.random() * chars.length));
+                editors[index].accessCode = newAccessCode;
+            }
+
+            await storage.saveEditors(editors, `Updated editor: ${editors[index].name}`);
+
+            await storage.appendAuditLog({
+                id: `log-${Date.now()}`, action: regenerateCode ? 'ACCESS_CODE_REGENERATED' : 'EDITOR_UPDATED',
+                details: { editorId, oldName, newName: editors[index].name, codeRegenerated: !!regenerateCode },
+                performedBy: 'admin', timestamp: new Date().toISOString(),
+                description: regenerateCode
+                    ? `Access code regenerated for "${editors[index].name}"`
+                    : `Editor "${oldName}" updated to "${editors[index].name}"`
+            });
+
+            // Return updated editor (include new access code if regenerated)
+            const { accessCode, ...safeEditor } = editors[index];
+            const response = { success: true, data: safeEditor };
+            if (newAccessCode) response.newAccessCode = newAccessCode;
+
+            return res.status(200).json(response);
+        }
+
         return res.status(405).json({ error: 'Method not allowed' });
     } catch (error) {
         console.error('API Error:', error);
