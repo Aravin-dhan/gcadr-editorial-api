@@ -121,6 +121,11 @@ const handler = async (req, res) => {
             posts = posts.slice(0, parseInt(limit));
         }
 
+        // Prevent browser caching
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+
         return res.status(200).json({
             success: true,
             data: posts,
@@ -128,6 +133,10 @@ const handler = async (req, res) => {
         });
     } catch (error) {
         console.error('API Error:', error);
+        // Prevent caching even on error
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
         // Fallback to sample posts on error
         return res.status(200).json({
             success: true,
