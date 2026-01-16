@@ -8,7 +8,8 @@ const handler = async (req, res) => {
     try {
         if (req.method === 'GET') {
             const editors = await storage.getEditors();
-            const safe = editors.map(({ accessCode, accessCodeHash, ...rest }) => rest);
+            // Expose access code for admin view
+            const safe = editors.map(({ accessCodeHash, ...rest }) => rest);
             return res.status(200).json({ success: true, data: safe });
         }
 
