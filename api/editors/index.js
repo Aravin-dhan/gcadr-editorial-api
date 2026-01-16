@@ -15,8 +15,13 @@ const handler = async (req, res) => {
         if (req.method === 'POST') {
             const { name, email, role, teamId } = req.body;
 
-            if (!name || !email || !role || !teamId) {
-                return res.status(400).json({ error: 'Missing required fields' });
+            // teamId is optional for managing_editor role
+            if (!name || !email || !role) {
+                return res.status(400).json({ error: 'Missing required fields: name, email, role' });
+            }
+
+            if (role !== 'managing_editor' && !teamId) {
+                return res.status(400).json({ error: 'teamId is required for non-managing-editor roles' });
             }
 
             const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';

@@ -63,6 +63,28 @@ const handler = async (req, res) => {
             return res.status(200).json({ success: true, data: teams[index] });
         }
 
+        if (req.method === 'DELETE') {
+            const { teamId } = req.query;
+            if (!teamId) return res.status(400).json({ error: 'Missing teamId' });
+
+            const teams = await storage.getTeams();
+            const index = teams.findIndex(t => t.id === teamId);
+            if (index === -1) return res.status(404).json({ error: 'Team not found' });
+
+            const teamName = teams[index].name;
+            teams[index].active = false;
+            await storage.saveTeams(teams, `Deactivated team: ${teamName}`);
+
+            await storage.appendAuditLog({
+                id: `log-${Date.now()}`, action: 'TEAM_DEACTIVATED',
+                details: { teamId, name: teamName },
+                performedBy: 'admin', timestamp: new Date().toISOString(),
+                description: `Team "${teamName}" deactivated`
+            });
+
+            return res.status(200).json({ success: true, message: `Team "${teamName}" deactivated` });
+        }
+
         return res.status(405).json({ error: 'Method not allowed' });
     } catch (error) {
         console.error('API Error:', error);
